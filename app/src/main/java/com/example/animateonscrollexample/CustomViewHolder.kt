@@ -4,20 +4,26 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewPropertyAnimator
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
 
 class CustomViewHolder @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private val delay = context.obtainStyledAttributes(attrs, R.styleable.CustomViewHolder)
+        .getInt(R.styleable.CustomViewHolder_delayAnimation, 0).toLong()
     private var isVisible = false // 현재 보여지고 있는지 (두 번 애니메이션 시키지 않기 위해서)
     private val location = IntArray(2)
-    private var delay: Long = 0
 
-    fun setWindowListener() {
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        this.y = 900f
+        this.alpha = 0f
+
         (parent.parent as NestedScrollView).viewTreeObserver.addOnGlobalLayoutListener {
             getLocationOnScreen(location)
 
@@ -36,14 +42,14 @@ class CustomViewHolder @JvmOverloads constructor(
         }
     }
 
-    private fun showIfINeed(yPosition : Int) {
+    private fun showIfINeed(yPosition: Int) {
         if (!isVisible && yPosition <= (parent.parent as NestedScrollView).height + ANIMATION_GUIDE_LINE) {
             isVisible = true
-            showAnimation()
+            startAnimation()
         }
     }
 
-    private fun showAnimation() {
+    private fun startAnimation() {
         val animator: ViewPropertyAnimator = this.animate()
             .translationY(0f)
             .alpha(1f)
@@ -51,10 +57,6 @@ class CustomViewHolder @JvmOverloads constructor(
             .setStartDelay(delay)
 
         animator.start()
-    }
-
-    fun setAnimationDelay(delay: Long) {
-        this.delay = delay
     }
 
     companion object {

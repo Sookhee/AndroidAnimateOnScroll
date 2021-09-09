@@ -5,6 +5,8 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.19722222222222222" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1503623188405797" />
+        <entry key="app/src/main/res/layout/item_horizontal.xml" value="0.2209298492740625" />
+        <entry key="app/src/main/res/layout/layout_horizontal.xml" value="0.19151846785225718" />
         <entry key="app/src/main/res/layout/view_holder.xml" value="0.1" />
       </map>
     </option>
