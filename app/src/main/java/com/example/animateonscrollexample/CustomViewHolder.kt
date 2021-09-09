@@ -15,6 +15,7 @@ class CustomViewHolder @JvmOverloads constructor(
 
     private var isVisible = false // 현재 보여지고 있는지 (두 번 애니메이션 시키지 않기 위해서)
     private val location = IntArray(2)
+    private var delay: Long = 0
 
     fun setWindowListener() {
         (parent.parent as NestedScrollView).viewTreeObserver.addOnGlobalLayoutListener {
@@ -47,8 +48,13 @@ class CustomViewHolder @JvmOverloads constructor(
             .translationY(0f)
             .alpha(1f)
             .setDuration(ANIMATION_DURATION)
+            .setStartDelay(delay)
 
         animator.start()
+    }
+
+    fun setAnimationDelay(delay: Long) {
+        this.delay = delay
     }
 
     companion object {

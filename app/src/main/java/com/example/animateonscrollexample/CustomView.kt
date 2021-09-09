@@ -25,6 +25,9 @@ class CustomView @JvmOverloads constructor(
 
         addView(binding.root, params)
 
-        binding.customViewHolder.setWindowListener()
+        binding.customViewHolder.apply {
+            setWindowListener()
+            setAnimationDelay(100)
+        }
     }
 }
