@@ -17,6 +17,11 @@ class CustomViewHolder @JvmOverloads constructor(
     private val location = IntArray(2)
 
     fun setWindowListener() {
+        (parent.parent as NestedScrollView).viewTreeObserver.addOnGlobalLayoutListener {
+            getLocationOnScreen(location)
+
+            showIfINeed(location[1])
+        }
 
         setScrollListener()
     }
@@ -26,14 +31,18 @@ class CustomViewHolder @JvmOverloads constructor(
         (parent.parent as NestedScrollView).viewTreeObserver.addOnScrollChangedListener {
             getLocationOnScreen(location)
 
-            if (!isVisible && location[1] <= (parent.parent as NestedScrollView).height + ANIMATION_GUIDE_LINE) {
-                isVisible = true
-                animationShow()
-            }
+            showIfINeed(location[1])
         }
     }
 
-    private fun animationShow() {
+    private fun showIfINeed(yPosition : Int) {
+        if (!isVisible && yPosition <= (parent.parent as NestedScrollView).height + ANIMATION_GUIDE_LINE) {
+            isVisible = true
+            showAnimation()
+        }
+    }
+
+    private fun showAnimation() {
         val animator: ViewPropertyAnimator = this.animate()
             .translationY(0f)
             .alpha(1f)
