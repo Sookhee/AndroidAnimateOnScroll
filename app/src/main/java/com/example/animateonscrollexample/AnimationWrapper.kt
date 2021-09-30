@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.util.AttributeSet
+import android.view.ViewParent
 import android.view.ViewPropertyAnimator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
@@ -27,21 +28,27 @@ class AnimationWrapper @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
+        var parentScrollView: ViewParent = parent
+
+        while(parentScrollView !is NestedScrollView) {
+            parentScrollView = parentScrollView.parent
+        }
+
         this.y = customY
         this.alpha = customAlpha
 
-        (parent.parent as NestedScrollView).viewTreeObserver.addOnGlobalLayoutListener {
+        parentScrollView.viewTreeObserver.addOnGlobalLayoutListener {
             getLocationOnScreen(location)
 
             showIfINeed(location[1])
         }
 
-        setScrollListener()
+        setScrollListener(parentScrollView)
     }
 
     @SuppressLint("NewApi")
-    private fun setScrollListener() {
-        (parent.parent as NestedScrollView).viewTreeObserver.addOnScrollChangedListener {
+    private fun setScrollListener(parentScrollView: NestedScrollView) {
+        parentScrollView.viewTreeObserver.addOnScrollChangedListener {
             getLocationOnScreen(location)
 
             showIfINeed(location[1])
@@ -49,7 +56,7 @@ class AnimationWrapper @JvmOverloads constructor(
     }
 
     private fun showIfINeed(yPosition: Int) {
-        if (!isVisible && yPosition <= (parent.parent as NestedScrollView).height + ANIMATION_GUIDE_LINE) {
+        if (!isVisible && yPosition <= ANIMATION_GUIDE_LINE) {
             isVisible = true
             startAnimation()
         }
@@ -66,8 +73,8 @@ class AnimationWrapper @JvmOverloads constructor(
     }
 
     companion object {
-        private const val ANIMATION_GUIDE_LINE: Int = 500
-        private const val ANIMATION_DURATION: Long = 1000
+        private const val ANIMATION_GUIDE_LINE: Int = 2000
+        private const val ANIMATION_DURATION: Long = 250
 
         val Int.dp: Float
             get() = (this * Resources.getSystem().displayMetrics.density + 0.5f)
