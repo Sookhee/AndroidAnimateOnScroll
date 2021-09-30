@@ -28,10 +28,10 @@ class MainActivity : AppCompatActivity() {
         binding.viewPagerWrapper.customAlpha = 0.0f
 
         binding.indicatorWrapper.customAlpha = 0.0f
-        binding.indicatorWrapper.delay = 250
+        binding.indicatorWrapper.customDelay = 250
 
         binding.subContentsWrapper.customAlpha = 0.0f
-        binding.subContentsWrapper.delay = 500
+        binding.subContentsWrapper.customDelay = 500
 
         setViewPager()
         setIndicator()

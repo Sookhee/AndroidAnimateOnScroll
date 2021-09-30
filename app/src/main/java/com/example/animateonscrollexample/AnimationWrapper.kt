@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.ViewParent
 import android.view.ViewPropertyAnimator
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,13 +15,12 @@ class AnimationWrapper @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+    @SuppressLint("CustomViewStyleable")
+    var customDelay = context.obtainStyledAttributes(attrs, R.styleable.CustomViewHolder)
+        .getInt(R.styleable.CustomViewHolder_delayAnimation, 0).toLong()
 
     var customY: Float = 20.dp
     var customAlpha: Float = 0.2f
-
-    @SuppressLint("CustomViewStyleable")
-    var delay = context.obtainStyledAttributes(attrs, R.styleable.CustomViewHolder)
-        .getInt(R.styleable.CustomViewHolder_delayAnimation, 0).toLong()
 
     private var isVisible = false // 현재 보여지고 있는지 (두 번 애니메이션 시키지 않기 위해서)
     private val location = IntArray(2)
@@ -33,6 +33,11 @@ class AnimationWrapper @JvmOverloads constructor(
         while(parentScrollView !is NestedScrollView) {
             parentScrollView = parentScrollView.parent
         }
+
+        val displayMetrics = DisplayMetrics()
+        display.getRealMetrics(displayMetrics)
+
+        ANIMATION_GUIDE_LINE = (displayMetrics.heightPixels) / 4 * 3
 
         this.y = customY
         this.alpha = customAlpha
@@ -67,13 +72,13 @@ class AnimationWrapper @JvmOverloads constructor(
             .translationY(0f)
             .alpha(1f)
             .setDuration(ANIMATION_DURATION)
-            .setStartDelay(delay)
+            .setStartDelay(customDelay)
 
         animator.start()
     }
 
     companion object {
-        private const val ANIMATION_GUIDE_LINE: Int = 2000
+        private var ANIMATION_GUIDE_LINE: Int = 0
         private const val ANIMATION_DURATION: Long = 250
 
         val Int.dp: Float
