@@ -24,6 +24,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        // 스크롤 인터렉션 세팅
+        binding.viewPagerWrapper.customAlpha = 0.0f
+
+        binding.indicatorWrapper.customAlpha = 0.0f
+        binding.indicatorWrapper.delay = 250
+
+        binding.subContentsWrapper.customAlpha = 0.0f
+        binding.subContentsWrapper.delay = 500
+
         setViewPager()
         setIndicator()
 
