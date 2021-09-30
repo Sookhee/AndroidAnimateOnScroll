@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.animateonscrollexample.databinding.ItemHorizontalBinding
 
 class HorizontalAdapter : RecyclerView.Adapter<HorizontalAdapter.ViewHolder>() {
-    var items: List<String> = emptyList()
+    lateinit var items: List<String>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,7 +24,7 @@ class HorizontalAdapter : RecyclerView.Adapter<HorizontalAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: String){
+        fun bind(item: String) {
             binding.itemTopView.setBackgroundColor(Color.parseColor(item))
         }
     }
